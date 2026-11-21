@@ -142,6 +142,15 @@ func (r *DayRepo) GroupDay(ctx context.Context, group string, date time.Time) (*
 	return &domain.GroupDay{Date: d.Date, Title: d.Title, Group: g.Name, Lessons: lessons}, nil
 }
 
+func (r *DayRepo) HasGroup(ctx context.Context, name string) (bool, error) {
+	var count int64
+	if err := r.db.WithContext(ctx).Model(&GroupModel{}).Where("name = ?", name).Count(&count).Error; err != nil {
+		return false, err
+	}
+
+	return count > 0, nil
+}
+
 func upsertGroups(tx *gorm.DB, names []string) (map[string]int64, error) {
 	ids := make(map[string]int64, len(names))
 	if len(names) == 0 {

@@ -33,6 +33,7 @@ func NewRouter(h Handlers, apiToken string) *fiber.App {
 	v1.Get("/groups/:name/schedule", h.Day.GroupSchedule)
 	v1.Get("/days/:date", h.Day.Get)
 	v1.Put("/days/:date", bearerAuth(apiToken), h.Day.Upsert)
+	v1.Get("/schedule", h.Page.GroupSchedule)
 	v1.Get("/pages/:name", h.Page.Get)
 	v1.Put("/pages/:name", bearerAuth(apiToken), h.Page.Set)
 

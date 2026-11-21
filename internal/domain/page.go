@@ -17,6 +17,12 @@ type Page struct {
 	UpdatedAt time.Time
 }
 
+type GroupPages struct {
+	Group    string
+	Today    *GroupDay
+	Tomorrow *GroupDay
+}
+
 type PageResult struct {
 	Name         string
 	Date         time.Time

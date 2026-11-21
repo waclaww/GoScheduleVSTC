@@ -4,6 +4,7 @@ import (
 	"errors"
 	"gateway/internal/domain"
 	"gateway/internal/usecase"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -51,4 +52,21 @@ func (h *Page) Get(c *fiber.Ctx) error {
 	}
 
 	return c.JSON(toPageResponse(page))
+}
+
+func (h *Page) GroupSchedule(c *fiber.Ctx) error {
+	group := strings.TrimSpace(c.Query("group"))
+	if group == "" {
+		return unprocessable("group is required")
+	}
+
+	schedule, err := h.uc.GroupSchedule(c.UserContext(), group)
+	if errors.Is(err, domain.ErrGroupNotFound) {
+		return fiber.NewError(fiber.StatusNotFound, err.Error())
+	}
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(toGroupPagesResponse(schedule))
 }

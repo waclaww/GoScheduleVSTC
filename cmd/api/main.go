@@ -42,7 +42,7 @@ func run() error {
 		Schedule: handlers.NewSchedule(usecase.NewSchedule(scheduleRepo)),
 		Archive:  handlers.NewArchive(usecase.NewArchive(archiveRepo)),
 		Day:      handlers.NewDay(usecase.NewDay(dayRepo)),
-		Page:     handlers.NewPage(usecase.NewPage(pageRepo)),
+		Page:     handlers.NewPage(usecase.NewPage(pageRepo, dayRepo)),
 	}, cfg.APIToken)
 
 	return app.Listen(":" + cfg.HTTPPort)

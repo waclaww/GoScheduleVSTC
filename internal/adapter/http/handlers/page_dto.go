@@ -23,6 +23,31 @@ type pageResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+type pageLessonsResponse struct {
+	Date    string           `json:"date"`
+	Title   string           `json:"title"`
+	Lessons []groupLessonDTO `json:"lessons"`
+}
+
+type groupPagesResponse struct {
+	Group    string               `json:"group"`
+	Today    *pageLessonsResponse `json:"today"`
+	Tomorrow *pageLessonsResponse `json:"tomorrow"`
+}
+
+func toGroupPagesResponse(g *domain.GroupPages) groupPagesResponse {
+	return groupPagesResponse{Group: g.Group, Today: toPageLessonsResponse(g.Today), Tomorrow: toPageLessonsResponse(g.Tomorrow)}
+}
+
+func toPageLessonsResponse(d *domain.GroupDay) *pageLessonsResponse {
+	if d == nil {
+		return nil
+	}
+
+	day := toGroupDayResponse(d)
+	return &pageLessonsResponse{Date: day.Date, Title: day.Title, Lessons: day.Lessons}
+}
+
 func toPageResultResponse(r domain.PageResult) pageResultResponse {
 	res := pageResultResponse{Name: r.Name, Date: r.Date.Format(time.DateOnly), Changed: r.Changed}
 	if r.PreviousDate != nil {
