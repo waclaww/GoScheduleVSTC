@@ -18,9 +18,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - default
-      - schedule
     restart: always
 
   db:
@@ -37,13 +34,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
-    networks:
-      - default
     restart: always
-
-networks:
-  schedule:
-    name: schedule_vstc
 
 volumes:
   gateway_pg:
