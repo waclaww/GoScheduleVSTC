@@ -1,0 +1,49 @@
+services:
+  gateway:
+    container_name: gateway
+    build: .
+    environment:
+      DB_URL: postgres://${POSTGRES_USER:-gateway}:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@db:5432/${POSTGRES_DB:-schedule}?sslmode=disable
+      HTTPPort: 8000
+      API_TOKEN: ${API_TOKEN:?API_TOKEN is required}
+      TZ: ${TZ:-Europe/Minsk}
+    ports:
+      - ${GATEWAY_PORT:-8080}:8000
+    healthcheck:
+      test: ["CMD", "curl", "--fail", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - default
+      - schedule
+    restart: always
+
+  db:
+    container_name: gateway_db
+    image: postgres:18
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-gateway}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+      POSTGRES_DB: ${POSTGRES_DB:-schedule}
+    volumes:
+      - gateway_pg:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - default
+    restart: always
+
+networks:
+  schedule:
+    name: schedule_vstc
+
+volumes:
+  gateway_pg:
