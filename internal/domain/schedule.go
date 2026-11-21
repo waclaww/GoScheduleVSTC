@@ -1,21 +1,26 @@
 package domain
 
-type Get struct {
-	Id      int64
-	Type    string
-	Date    string
-	Content string
+import "errors"
+
+var (
+	ErrGroupNotFound     = errors.New("group not found")
+	ErrScheduleNotEnough = errors.New("not enough schedules")
+	ErrScheduleMalformed = errors.New("schedule malformed")
+)
+
+type Schedule struct {
+	Id       int64
+	Date     string
+	Schedule string
 }
 
-type Lesson struct {
-	Id   int
-	Time string
-	Name string
+type Archive struct {
+	Id       int64
+	Date     string
+	Schedule string
 }
 
-type ByGroup struct {
-	Id     int
-	Type   string
-	Date   string
-	Lesson Lesson
+type GroupSchedule struct {
+	Today    string
+	Tomorrow string
 }

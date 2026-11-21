@@ -13,3 +13,7 @@ func NewGeneral() *General {
 func (h *General) Index(c *fiber.Ctx) error {
 	return c.SendStatus(fiber.StatusOK)
 }
+
+func (h *General) Health(c *fiber.Ctx) error {
+	return c.JSON(fiber.Map{"status": "healthy"})
+}

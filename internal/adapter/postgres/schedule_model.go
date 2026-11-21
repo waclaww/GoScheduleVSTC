@@ -1,26 +1,21 @@
 package postgres
 
-import (
-	"gateway/internal/domain"
-
-	"gorm.io/datatypes"
-)
+import "gateway/internal/domain"
 
 type ScheduleModel struct {
-	ID      int64          `gorm:"primaryKey"`
-	Type    string         `gorm:"type:string"`
-	Date    string         `gorm:"type:date"`
-	Content datatypes.JSON `gorm:"type:jsonb"`
+	ID       int64  `gorm:"primaryKey"`
+	Schedule string `gorm:"type:text;not null"`
+	Date     string `gorm:"type:varchar(50);not null"`
 }
 
 func (ScheduleModel) TableName() string {
-	return "schedule"
+	return "vstechnical_datas"
 }
 
-func (m ScheduleModel) toDomain() *domain.Get {
-	return &domain.Get{Id: m.ID, Type: m.Type, Date: m.Date, Content: m.Content.GormDataType()}
+func (m ScheduleModel) toDomain() *domain.Schedule {
+	return &domain.Schedule{Id: m.ID, Date: m.Date, Schedule: m.Schedule}
 }
 
-func ScheduleModelFromDomain(s *domain.Get) ScheduleModel {
-	return ScheduleModel{ID: s.Id, Type: s.Type, Date: s.Date, Content: datatypes.JSON(s.Content)}
+func ScheduleModelFromDomain(s *domain.Schedule) ScheduleModel {
+	return ScheduleModel{ID: s.Id, Date: s.Date, Schedule: s.Schedule}
 }

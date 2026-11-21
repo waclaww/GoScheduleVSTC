@@ -13,12 +13,12 @@ func NewDB(dsn string) (*gorm.DB, error) {
 		Logger: logger.Default.LogMode(logger.Warn),
 	})
 	if err != nil {
-		return nil, fmt.Errorf("open db: %w", db)
+		return nil, fmt.Errorf("open db: %w", err)
 	}
 
 	sqlDb, err := db.DB()
 	if err != nil {
-		return nil, fmt.Errorf("get sql db: %w", sqlDb)
+		return nil, fmt.Errorf("get sql db: %w", err)
 	}
 
 	sqlDb.SetMaxOpenConns(10)

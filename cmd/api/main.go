@@ -5,6 +5,7 @@ import (
 	"gateway/internal/adapter/http/handlers"
 	"gateway/internal/adapter/postgres"
 	"gateway/internal/config"
+	"gateway/internal/usecase"
 	"log"
 )
 
@@ -31,10 +32,13 @@ func run() error {
 	}
 	defer sqlDb.Close()
 
-	_ = postgres.NewScheduleRepo(db)
+	scheduleRepo := postgres.NewScheduleRepo(db)
+	archiveRepo := postgres.NewArchiveRepo(db)
+
 	app := adapterhttp.NewRouter(adapterhttp.Handlers{
 		General:  handlers.NewGeneral(),
-		Schedule: handlers.NewSchedule(),
+		Schedule: handlers.NewSchedule(usecase.NewSchedule(scheduleRepo)),
+		Archive:  handlers.NewArchive(usecase.NewArchive(archiveRepo)),
 	})
 
 	return app.Listen(":" + cfg.HTTPPort)
