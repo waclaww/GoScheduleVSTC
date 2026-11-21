@@ -12,6 +12,7 @@ import (
 type Config struct {
 	HTTPPort string
 	DB_URL   string
+	APIToken string
 }
 
 func Load() (Config, error) {
@@ -30,7 +31,7 @@ func Load() (Config, error) {
 		port = "8000"
 	}
 
-	return Config{HTTPPort: port, DB_URL: dbUrl}, nil
+	return Config{HTTPPort: port, DB_URL: dbUrl, APIToken: os.Getenv("API_TOKEN")}, nil
 }
 
 func dbUrlFromParts() string {

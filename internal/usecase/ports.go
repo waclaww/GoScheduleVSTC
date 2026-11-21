@@ -3,6 +3,7 @@ package usecase
 import (
 	"context"
 	"gateway/internal/domain"
+	"time"
 )
 
 type ScheduleRepository interface {
@@ -15,4 +16,11 @@ type ArchiveRepository interface {
 	List(ctx context.Context) ([]*domain.Archive, error)
 	ListByDate(ctx context.Context, date string) ([]*domain.Archive, error)
 	Create(ctx context.Context, a *domain.Archive) error
+}
+
+type DayRepository interface {
+	Upsert(ctx context.Context, d *domain.Day) (domain.UpsertResult, error)
+	Get(ctx context.Context, date time.Time) (*domain.Day, error)
+	Groups(ctx context.Context) ([]string, error)
+	GroupDay(ctx context.Context, group string, date time.Time) (*domain.GroupDay, error)
 }

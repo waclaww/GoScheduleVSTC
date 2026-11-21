@@ -8,5 +8,9 @@ func AutoMigrate(db *gorm.DB) error {
 	return db.AutoMigrate(
 		&ScheduleModel{},
 		&ArchiveModel{},
+		&GroupModel{},
+		&DayModel{},
+		&BellSlotModel{},
+		&LessonModel{},
 	)
 }

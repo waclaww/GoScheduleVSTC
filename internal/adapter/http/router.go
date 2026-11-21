@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v2/middleware/requestid"
 )
 
-func NewRouter(h Handlers) *fiber.App {
+func NewRouter(h Handlers, apiToken string) *fiber.App {
 	app := fiber.New(fiber.Config{
 		ErrorHandler: errorHandler,
 	})
@@ -27,6 +27,12 @@ func NewRouter(h Handlers) *fiber.App {
 	schedule.Get("/vstechnical_archive_get", h.Archive.List)
 	schedule.Post("/vstechnical_archive_insert", h.Archive.Create)
 	schedule.Post("/vstechnical_archive_get_date", h.Archive.ByDate)
+
+	v1 := app.Group("/api/v1")
+	v1.Get("/groups", h.Day.Groups)
+	v1.Get("/groups/:name/schedule", h.Day.GroupSchedule)
+	v1.Get("/days/:date", h.Day.Get)
+	v1.Put("/days/:date", bearerAuth(apiToken), h.Day.Upsert)
 
 	return app
 }
