@@ -7,4 +7,5 @@ type Handlers struct {
 	Schedule *handlers.Schedule
 	Archive  *handlers.Archive
 	Day      *handlers.Day
+	Page     *handlers.Page
 }

@@ -12,5 +12,6 @@ func AutoMigrate(db *gorm.DB) error {
 		&DayModel{},
 		&BellSlotModel{},
 		&LessonModel{},
+		&PageModel{},
 	)
 }

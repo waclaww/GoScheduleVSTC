@@ -35,12 +35,14 @@ func run() error {
 	scheduleRepo := postgres.NewScheduleRepo(db)
 	archiveRepo := postgres.NewArchiveRepo(db)
 	dayRepo := postgres.NewDayRepo(db)
+	pageRepo := postgres.NewPageRepo(db)
 
 	app := adapterhttp.NewRouter(adapterhttp.Handlers{
 		General:  handlers.NewGeneral(),
 		Schedule: handlers.NewSchedule(usecase.NewSchedule(scheduleRepo)),
 		Archive:  handlers.NewArchive(usecase.NewArchive(archiveRepo)),
 		Day:      handlers.NewDay(usecase.NewDay(dayRepo)),
+		Page:     handlers.NewPage(usecase.NewPage(pageRepo)),
 	}, cfg.APIToken)
 
 	return app.Listen(":" + cfg.HTTPPort)

@@ -24,3 +24,8 @@ type DayRepository interface {
 	Groups(ctx context.Context) ([]string, error)
 	GroupDay(ctx context.Context, group string, date time.Time) (*domain.GroupDay, error)
 }
+
+type PageRepository interface {
+	Set(ctx context.Context, name string, date time.Time) (domain.PageResult, error)
+	Get(ctx context.Context, name string) (*domain.Page, error)
+}
